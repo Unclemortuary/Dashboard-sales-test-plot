@@ -1,0 +1,11 @@
+
+#MAC OS specific
+.DS_Store
+
+#VS Code
+.vscode
+
+#Build artefactures
+dist/
+node_modules/
+coverage/
