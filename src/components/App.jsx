@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Provider } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import store from '../modules/store';
+import loadInitialData, { initApp } from "../modules/app";
+import { fetchApiIdList } from "../modules/filterSlice";
 
 const App = () => {
-    const [clientId, setClientId] = useState(0);
-    const [categories, setCategories] = useState();
-    const [brands, setBrands] = useState();
+    const dispatch = useDispatch();
+    const initialDataHandler = (data) => dispatch(fetchApiIdList(data));
+    useEffect(() => {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+        loadInitialData(initialDataHandler, signal);
 
-    // useEffect(() => {
-    //     initApp({ setClientId, setCategories, setBrands });
-    // }, []);
+        return () => abortController.abort();
+    }, []);
 
-    return <Provider store={store}><p>Hello</p></Provider>;
+    return <p>Hello</p>;
 };
 
 export default App;

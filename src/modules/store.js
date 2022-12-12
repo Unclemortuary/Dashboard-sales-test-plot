@@ -1,9 +1,12 @@
 /*
 {
-    apiIdList: [{
-        name: "",
-        attributeValue: ""
-    }],
+    apiIdList: {
+        all: {
+            "12345": "Ozon",
+            "32425": "Avito"
+        },
+        current: "12345"
+    },
     datePicker: {
         value: {
             start: "date",
@@ -11,21 +14,27 @@
         }
     },
     filters: {
-        "date range": {
+        "Ozon": {
             categories: {
                 all: [],
                 current: "",
             },
             brands: {
-                all: [],
+                all: {
+                    "categoryName": [],
+                    "categoryName": []
+                },
                 current: ""
             },
             products: {
-                all: [],
+                all: {
+                    "brandName": [],
+                    "brandName": []
+                },
                 current: ""
             }
         },
-        "date range": {
+        "Avito": {
             categories: {
                 all: [],
                 current: "",
@@ -46,12 +55,8 @@
             }
         }
     }
-    plots: {
-        "filters string": { result json }
-    }
 }
 */
-
 
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
@@ -72,7 +77,6 @@ export default configureStore({
             brandReducer,
             productReducer
         })
-        //plots: {}
     },
     devTools: true
 });

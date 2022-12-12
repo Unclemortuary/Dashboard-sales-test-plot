@@ -1,9 +1,12 @@
-import * as api from './src/modules/api';
+import { createAction } from '@reduxjs/toolkit';
 
-const initApp = ({ setClientId, setCategories, setBrands }) => {
-    const CLIENT_ID = 32;
-    const handler = (data) => console.log(data);
-    const clientApiId = api.getClientApiId(handler, CLIENT_ID);
-};
+import * as api from './api';
 
-export default initApp;
+const CLIENT_ID = 30;
+
+const loadInitialData = (handler, cancellationToken) => api.getClientApiId(CLIENT_ID, cancellationToken)
+    .then(clientApiData => handler(clientApiData));
+
+export const initApp = createAction('app/initApp');
+
+export default loadInitialData;

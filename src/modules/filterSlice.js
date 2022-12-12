@@ -1,15 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import { initApp } from "./app";
+
 const apiIdListSlice = createSlice({
     name: "apiIdList",
-    initialState: [],
+    initialState: {
+        all: {},
+        current: {}
+    },
     reducers: {
         fetchApiIdList: (state, action) => {
-            const newState = [];
             // here I'm making an assumption that names and attribute values match by array index
-            action.payload.name.forEach((name, index) => {
-                newState.push({ name: name, attributeValue: action.payload.attribute_value[index] })
+            action.payload.attribute_value.forEach((id, index) => {
+                state.all[id] = action.payload.name[index];
             });
+        },
+        selectApiId: (state, action) => {
+            state.current = action.payload;
         }
     }
 });
@@ -24,7 +31,11 @@ const datePickerSlice = createSlice({
         changeEndDate: (state, action) => {
             state.endDate = action.payload
         }
-    }
+    },
+    extraReducers: builder => builder.addCase(initApp, () => ({
+        startDate: Date.now(),
+        endDate: "1234"
+    }))
 });
 
 const categorySlice = createSlice({
@@ -44,6 +55,8 @@ const productSlice = createSlice({
     initialState: {},
     reducers: {}
 });
+
+export const { fetchApiIdList, selectApiId } = apiIdListSlice.actions;
 
 export const { reducer: apiIdListReducer } = apiIdListSlice;
 export const { reducer: datePickerReducer } = datePickerSlice;

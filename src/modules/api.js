@@ -2,13 +2,17 @@ const BASE_URL = 'http://62.84.124.35';
 const BASE_PORT = 5051;
 const FILTER_URL_PREFIX = 'api/v1/dashboard_filter';
 
-export const getClientApiId = (responseHandler, params) => new Promise((resolve, reject) => fetch(`${BASE_URL}:${BASE_PORT}/${FILTER_URL_PREFIX}/client`, {
+export const getClientApiId = (params, cancellationToken) => new Promise((resolve, reject) => fetch(`${BASE_URL}:${BASE_PORT}/${FILTER_URL_PREFIX}/client`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
     },
+    signal: cancellationToken,
     body: toClientRequestJSON(params)
-}).then(response => response.json().then(data => responseHandler(data.attribute_value)))); 
+}).then(response => response.json().then(data => resolve(data))))
+.catch(err => {
+    console.log(`client api id request error ${err}`);
+}); 
 
 export const getCategories = (responseHandler, params) => fetch(`${BASE_URL}:${BASE_PORT}/${FILTER_URL_PREFIX}/categories`, {
     body: toCategoriesRequestJSON(params)
