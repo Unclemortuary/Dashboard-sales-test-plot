@@ -1,6 +1,6 @@
 const BASE_URL = 'http://62.84.124.35';
 const BASE_PORT = 5051;
-const FILTER_URL_PREFIX = 'api/v1/dashboard_filter';
+const FILTER_URL_PREFIX = 'api/v1/dashboard_sales_filter';
 
 export const getClientApiId = (params, cancellationToken) => new Promise((resolve, reject) => fetch(`${BASE_URL}:${BASE_PORT}/${FILTER_URL_PREFIX}/client`, {
     method: 'POST',

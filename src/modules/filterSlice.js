@@ -1,22 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
+import dayjs from "dayjs";
 
 import { initApp } from "./app";
+
+const DATE_FORMAT = 'DD/MM/YYYY';
 
 const apiIdListSlice = createSlice({
     name: "apiIdList",
     initialState: {
-        all: {},
-        current: {}
+        all: [],
+        selected: []
     },
     reducers: {
         fetchApiIdList: (state, action) => {
-            // here I'm making an assumption that names and attribute values match by array index
-            action.payload.attribute_value.forEach((id, index) => {
-                state.all[id] = action.payload.name[index];
-            });
+            state.all = action.payload;
         },
         selectApiId: (state, action) => {
-            state.current = action.payload;
+            const itemId = action.payload;
+            if(!state.selected.includes(itemId)) {
+                state.selected.push(itemId);
+            }
+        },
+        deselectApiId: (state, action) => {
+            const newState = [];
+            const itemId = action.payload;
+            state.selected.forEach(el => {
+                if (el !== itemId) {
+                    newState.push(el);
+                }
+            })
+            return newState;
         }
     }
 });
@@ -33,8 +46,8 @@ const datePickerSlice = createSlice({
         }
     },
     extraReducers: builder => builder.addCase(initApp, () => ({
-        startDate: Date.now(),
-        endDate: "1234"
+        startDate: dayjs().date(1).format(DATE_FORMAT),
+        endDate: dayjs().date(dayjs().daysInMonth()).format(DATE_FORMAT)
     }))
 });
 

@@ -29,7 +29,7 @@ module.exports = function(env, argv) {
           },
         },
         {
-          test: /\.(sa|sc|c)ss$/,
+          test: /\.css$/,
           use: ["style-loader", "css-loader"],
         },
         {

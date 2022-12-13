@@ -1,0 +1,36 @@
+.filtersContainer {
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+}
+
+.datePickerContainer {
+    width: 70%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.apply {
+    position: absolute;
+    right: 10px;
+}
+
+.selects {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.selectWrapper {
+    width: 100px;
+}
+
+.select {
+    position: absolute;
+    height: 100px;
+    width: 200px;
+}
+
+.selectWrapper > .selectName {
+    margin: 0;
+}
