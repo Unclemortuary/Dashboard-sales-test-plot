@@ -32,7 +32,7 @@ const App = () => {
     </> );
 };
 
-export const Fallback = () => <h3>Loading...</h3>;
+export const Fallback = () => <h3>Загрузка...</h3>;
 
 export default App;
 

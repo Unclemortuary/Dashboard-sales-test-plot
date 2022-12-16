@@ -1,23 +1,34 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { 
-    getAllApiIds,
-    getAllCategories,
-    getAllBrands,
-    getAllProducts } from '../modules/filterSelectors';
+    getAllApiIds, getAllCategories, getAllBrands, getAllProducts,
+    getApiIdsIsLoading, getCategoriesIsLoading, getBrandsIsLoading, getProductsIsLoading,
+    getSelectedApiIds, getSelectedCategories, getSelectedBrands, getSelectedProducts } from '../modules/filterSelectors';
 import { startFetching, fetchCategories, fetchBrands, fetchProducts,
     selectApiId, selectBrand, selectCategory, selectProduct,
     deselectCategory, deselectBrand, deselectProduct } from '../modules/filterSlice';
 import { fetchFiltersData } from '../modules/filters';
+import { Fallback } from './App';
 
 import './filters.css';
 
 const Filters = () => {
     const dispatch = useDispatch();
+
     const allApiIds = useSelector(getAllApiIds);
     const allCategories = useSelector(getAllCategories);
     const allBrands = useSelector(getAllBrands);
     const allProducts = useSelector(getAllProducts);
+
+    const areApiIdsLoading = useSelector(getApiIdsIsLoading);
+    const areCategoriesLoading = useSelector(getCategoriesIsLoading);
+    const areBrandsLoading = useSelector(getBrandsIsLoading);
+    const areProductsLoading = useSelector(getProductsIsLoading);
+
+    const selectedApiId = useSelector(getSelectedApiIds);
+    const selectedCategories = useSelector(getSelectedCategories);
+    const selectedBrands = useSelector(getSelectedBrands);
+    const selectedProducts = useSelector(getSelectedProducts);
 
     const categoriesProcessor = categories => dispatch(fetchCategories(categories));
     const brandsProcessor = brands => dispatch(fetchBrands(brands));
@@ -45,44 +56,64 @@ const Filters = () => {
             </div>
                 <div className="selects">
                     <Select
-                        className="apiIdFilter"
-                        placeholder="Магазин"
+                        placeholder={"Магазин"}
                         nameGetter={apiId => apiId.name}
-                        idGetter={apiId => apiId.attribute_value}
-                        options={allApiIds}/>
+                        idGetter={apiId => apiId.id}
+                        options={allApiIds}
+                        onSelect={selectApiId}
+                        isLoading={areApiIdsLoading}/>
+                    <Select placeholder={"Категория"} options={allCategories} onSelect={selectCategory} isLoading={areCategoriesLoading}/>
+                    <Select placeholder={"Брэнд"} options={allBrands} onSelect={selectBrand} isLoading={areBrandsLoading}/>
                     <Select
-                        className="categoryFilter"
-                        placeholder="Категория"
-                        options={allCategories}/>
-                    <Select
-                        className="brandFilter"
-                        placeholder="Брэнд"
-                        options={allBrands}/>
-                    <Select
-                        className="productFilter"
-                        placeholder="Товар"
+                        placeholder={"Товар"}
                         options={allProducts}
-                        multi/>
+                        onSelect={selectProduct}
+                        multi
+                        shouldStartLoading={selectedApiId.length > 0 && selectedCategories.length > 0 && selectedBrands.length > 0}
+                        instructionText={"Выберите магазин, категорию и брэнд для того чтобы увидеть продукты"}
+                        isLoading={areProductsLoading}/>
                 </div>
         </div>
     );
 };
 
-const Select = ({ className, placeholder, options, nameGetter, idGetter, multi, isLoading }) => {
+const Select = ({ className, placeholder, options, onSelect, onDeselect, nameGetter, idGetter, multi, shouldStartLoading, instructionText, isLoading }) => {
     const [open, setOpen] = useState(false);
-    const mainRef = useRef();
+    const [selected, setSelected] = useState(multi ? [] : "");
+
+    //const forDate = useSelector();
+    // check for being outdated
+
+    const onChange = e => {
+        onSelect(e.target.value);
+        if (multi) {
+            setSelected(prevValue => prevValue.push(e.target.value))
+        } else {
+            setSelected(e.target.value);
+        }
+        setOpen(false);
+    }
+
     return (
         <div className={`selectWrapper ${className}`}>
-            <p className='selectName'>{placeholder}</p>
+            <p className='selectName'>{selected ? (multi ? selected.reduce((acc, current) => acc += `${current} `, "") : selected) : placeholder}</p>
             <button onClick={() => setOpen(prevValue => !prevValue)}>{ open ? "close" : "open" }</button>
-            <select className='select' style={{ "display": open ? "block" : "none" }} size="6" ref={mainRef} multiple={multi}>
+            <select 
+                className='select'
+                style={{ "display": open ? "block" : "none" }}
+                size="6"
+                multiple={multi}
+                onChange={onChange}>
+                { !shouldStartLoading && <option disabled>{instructionText}</option> }
+                { (shouldStartLoading && isLoading) && <option disabled>Загрузка</option> }
                 { options && options.map(option => 
                     nameGetter
                     ? <option key={idGetter(option)}>{nameGetter(option)}</option>
                     : <option key={option}>{option}</option>) }
+                { shouldStartLoading && !isLoading && !options && <option disabled>Нет данных</option>}
             </select>
         </div>
     );
-}
+};
 
 export default Filters;
