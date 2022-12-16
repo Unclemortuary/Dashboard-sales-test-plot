@@ -1,5 +1,15 @@
-const BASE_URL = 'http://62.84.124.35';
-const BASE_PORT = 5051;
+import { 
+    toClientRequestJSON,
+    toCategoriesRequestJSON,
+    toBrandsRequestJSON,
+    toProductsRequestJSON,
+    categoriesResponseMapper,
+    brandsResponseMapper,
+    productsResponseMapper
+ } from "./mappers";
+
+const BASE_URL = 'https://apps1.ecomru.ru';
+const BASE_PORT = 4441;
 const FILTER_URL_PREFIX = 'api/v1/dashboard_sales_filter';
 
 export const getClientApiId = (params, cancellationToken) => new Promise((resolve, reject) => fetch(`${BASE_URL}:${BASE_PORT}/${FILTER_URL_PREFIX}/client`, {
@@ -12,28 +22,49 @@ export const getClientApiId = (params, cancellationToken) => new Promise((resolv
 }).then(response => response.json().then(data => resolve(data))))
 .catch(err => {
     console.log(`client api id request error ${err}`);
-}); 
+});
 
-export const getCategories = (responseHandler, params) => fetch(`${BASE_URL}:${BASE_PORT}/${FILTER_URL_PREFIX}/categories`, {
+export const getCategories = (responseHandler, params, cancellationToken) => fetch(`${BASE_URL}:${BASE_PORT}/${FILTER_URL_PREFIX}/category`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    signal: cancellationToken,
     body: toCategoriesRequestJSON(params)
-}).then(response => responseHandler(response));
+}).then(response => response.json().then(data => {
+    const mapped = categoriesResponseMapper(data);
+    responseHandler(mapped);
+    return mapped;
+})).catch(err => {
+    console.log(`categories request error ${err}`);
+});
 
-export const getBrands = (responseHandler, params) => fetch(`${BASE_URL}:${BASE_PORT}/${FILTER_URL_PREFIX}/brand`, {
+export const getBrands = (responseHandler, params, cancellationToken) => fetch(`${BASE_URL}:${BASE_PORT}/${FILTER_URL_PREFIX}/brand`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    signal: cancellationToken,
     body: toBrandsRequestJSON(params)
-}).then(response => responseHandler(response));
+}).then(response => response.json().then(data => {
+    const mapped = brandsResponseMapper(data);
+    responseHandler(mapped);
+    return mapped;
+})).catch(err => {
+    console.log(`brands request error ${err}`);
+});
 
-export const getProducts = (responseHandler, params) => fetch(`${BASE_URL}:${BASE_PORT}/${FILTER_URL_PREFIX}/products`, {
+export const getProducts = (responseHandler, params, cancellationToken) => fetch(`${BASE_URL}:${BASE_PORT}/${FILTER_URL_PREFIX}/products`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    signal: cancellationToken,
     body: toProductsRequestJSON(params)
-}).then(response => responseHandler(response));
-
-
-
-const toClientRequestJSON = clientId => JSON.stringify({ client_id: clientId });
-const toCategoriesRequestJSON = ({ apiIdList, dateFrom, dateTo }) => JSON.stringify({ 
-    api_id_list: [apiIdList], date_from: dateFrom, date_to: dateTo });
-const toBrandsRequestJSON = ({ apiIdList, categoryIdList, dateFrom, dateTo }) => JSON.stringify({ 
-    api_id_list: [apiIdList], category_name_list: [categoryIdList], date_from: dateFrom, date_to: dateTo });
-const toProductsRequestJSON = ({ apiIdList, categoryIdList, brandNameList, dateFrom, dateTo }) => JSON.stringify({ 
-    api_id_list: [apiIdList], category_name_list: [categoryIdList], brand_name_list: [brandNameList], date_from: dateFrom, date_to: dateTo });
-
-// 155597
+}).then(response => response.json().then(data => {
+    const mapped = productsResponseMapper(data);
+    responseHandler(mapped);
+    return mapped;
+})).catch(err => {
+    console.log(`products request error ${err}`);
+});

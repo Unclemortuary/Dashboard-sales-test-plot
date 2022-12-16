@@ -1,65 +1,6 @@
-/*
-{
-    apiIdList: {
-        all: {
-            "12345": "Ozon",
-            "32425": "Avito"
-        },
-        current: "12345"
-    },
-    datePicker: {
-        value: {
-            start: "date",
-            end: "date"
-        }
-    },
-    filters: {
-        "Ozon": {
-            categories: {
-                all: [],
-                current: "",
-            },
-            brands: {
-                all: {
-                    "categoryName": [],
-                    "categoryName": []
-                },
-                current: ""
-            },
-            products: {
-                all: {
-                    "brandName": [],
-                    "brandName": []
-                },
-                current: ""
-            }
-        },
-        "Avito": {
-            categories: {
-                all: [],
-                current: "",
-            },
-            brands: {
-                all: {
-                    "categoryName": [],
-                    "categoryName": []
-                },
-                current: ""
-            },
-            products: {
-                all: {
-                    "brandName": [],
-                    "brandName": []
-                },
-                current: ""
-            }
-        }
-    }
-}
-*/
-
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
+import { appReducer } from "./app";
 import {
     apiIdListReducer,
     datePickerReducer,
@@ -70,6 +11,7 @@ import {
 
 export default configureStore({
     reducer: {
+        app: appReducer,
         filter: combineReducers({
             apiIdListReducer,
             datePickerReducer,

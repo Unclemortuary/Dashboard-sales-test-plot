@@ -1,7 +1,12 @@
 .filtersContainer {
-    display: flex;
-    flex-direction: column;
-    row-gap: 15px;
+    padding: 5px 15px;
+    min-width: 400px;
+}
+
+.datePickers {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas: "empty datePickerFrom datePickerTo apply";
 }
 
 .datePickerContainer {
@@ -10,25 +15,43 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
+.datePickerFrom {
+    grid-area: datePickerFrom;
+}
+
+.datePickerTo {
+    grid-area: datePickerTo;
+}
+
 .apply {
-    position: absolute;
-    right: 10px;
+    grid-area: apply;
 }
 
 .selects {
-    width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    margin-top: 20px;
+    grid-auto-flow: dense;
+    gap: 15px;
+
 }
 
 .selectWrapper {
-    width: 100px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 20px;
+    border-color: aqua;
+    padding: 4px 10px;
 }
 
 .select {
     position: absolute;
+    top: 20px;
     height: 100px;
-    width: 200px;
+    width: 100%;
 }
 
 .selectWrapper > .selectName {

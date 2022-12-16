@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import loadInitialData, { initApp } from "../modules/app";
+import loadInitialData, { initApp, isReady } from "../modules/app";
 import { fetchApiIdList } from "../modules/filterSlice";
 
 import Filters from "./Filters";
@@ -11,6 +11,7 @@ import './app.css';
 
 const App = () => {
     const dispatch = useDispatch();
+    const ready = useSelector(isReady);
     const initialDataHandler = (data) => dispatch(fetchApiIdList(data));
     useEffect(() => {
         const abortController = new AbortController();
@@ -21,11 +22,14 @@ const App = () => {
     }, []);
 
     return (
-        <div className="container">
-            <Filters/>
-            <Plot/>
-        </div>
-    );
+    <>
+        { ready 
+        ? (<div className="container">
+                <Filters/>
+                <Plot/>
+            </div>)
+        : <Fallback/> }
+    </> );
 };
 
 export const Fallback = () => <h3>Loading...</h3>;
