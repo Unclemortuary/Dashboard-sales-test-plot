@@ -1,0 +1,59 @@
+.filtersContainer {
+    padding: 5px 15px;
+    min-width: 400px;
+}
+
+.datePickers {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas: "empty datePickerFrom datePickerTo apply";
+}
+
+.datePickerContainer {
+    width: 70%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.datePickerFrom {
+    grid-area: datePickerFrom;
+}
+
+.datePickerTo {
+    grid-area: datePickerTo;
+}
+
+.apply {
+    grid-area: apply;
+}
+
+.selects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    margin-top: 20px;
+    grid-auto-flow: dense;
+    gap: 15px;
+
+}
+
+.selectWrapper {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 20px;
+    border-color: aqua;
+    padding: 4px 10px;
+}
+
+.select {
+    position: absolute;
+    top: 20px;
+    height: 100px;
+    width: 100%;
+}
+
+.selectWrapper > .selectName {
+    margin: 0;
+}
